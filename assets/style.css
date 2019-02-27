@@ -1,0 +1,42 @@
+/*
+* Name: Custom Style Sheet
+* Author: MEhdi Hadiany
+* Description: Custom Style Sheet for Product Reviews plugin
+* Version: 1.0
+*/
+.pr_img {
+    width: 100%;
+    background-size: cover;
+    background-position: left;
+}
+
+.pr_img img {
+    opacity: 0 !important;
+    visibility: hidden;
+}
+
+ul.pr_items li:not(:last-child) {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+ul.pr_items {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.products_reviews .widget-title {
+    font-size: 100%;
+}
+
+.pr_ratings {
+    padding-top: 20px;
+    text-align: left;
+}
+
+.pr_title {
+    margin-bottom: 10px;
+    text-align: left;
+    padding-top: 10px;
+}
