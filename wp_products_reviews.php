@@ -36,6 +36,7 @@ if(!class_exists('WP_Products_Reviews'))
 			add_filter("plugin_action_links_$plugin", array( $this, 'plugin_settings_link' ));
 
 			add_action( 'wp_enqueue_scripts', array(&$this, 'load_dashicons_front_end') );
+
 		} // END public function __construct
 
 		/**
@@ -69,7 +70,6 @@ if(!class_exists('WP_Products_Reviews'))
 			array_unshift($links, $settings_link);
 			return $links;
 		}
-
 
 	} // END class WP_Products_Reviews
 } // END if(!class_exists('WP_Products_Reviews'))

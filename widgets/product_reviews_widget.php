@@ -103,11 +103,22 @@ if(!class_exists('Product_Reviews_Widget'))
     	 * $default = Default value from Settings
     	 */
     	public function is_target($target = '', $default = ''){
+    	    $output = '';
+
     	    $is_target_exists = get_term_by('slug', $target, 'target-group');
 
     	    $default = ($default != '')?$default:get_option('previews_target');
 
-    	    return (isset($is_target_exists->slug) && $is_target_exists->slug != '')?$is_target_exists->slug:$default;
+    	    if(isset($is_target_exists->slug) && $is_target_exists->slug != ''){
+    	        $output = $is_target_exists->slug;
+    	        setcookie('wp_product_reviews_target', $is_target_exists->slug);
+    	    }else{
+    	      $output = (isset($_COOKIE['wp_product_reviews_target']) && $_COOKIE['wp_product_reviews_target'] != '')?$_COOKIE['wp_product_reviews_target']:$default;
+    	      setcookie('wp_product_reviews_target', $output);
+    	    }
+
+    	    return $output;
+
     	}
 
     	public function update( $new_instance, $old_instance ) {
