@@ -8,29 +8,40 @@ if(!class_exists('Product_Reviews_Widget'))
 	{
 		public function __construct() {
     		// Instantiate the parent object
-    		$widget_ops = array(
+    		$widget_ops = array( 
         		'classname' => 'products_reviews',
         		'description' => 'Sidebar Widget for Products Reviews',
         	);
         	parent::__construct( 'products_reviews', 'Product Reviews', $widget_ops );
+        	
+        	$this->wp_product_reviews_target = '';
+        	
+        	add_action('init', array(&$this, 'init'));
     	}
-
+    	
+    	
+    	/* Set Cookies on Init */
+    	public function init(){
+    	    $target_group = (isset($_GET['target']) && $_GET['target'] != '')?$this->is_target($_GET['target']):$this->is_target();
+    	    setcookie('wp_product_reviews_target', $target_group);
+    	}
+    
     	public function widget( $args, $instance ) {
-
+    	    
     	    // Widget output
     		echo $args['before_widget'];
-
+    		
         	if ( ! empty( $instance['title'] ) ) {
         		echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
         	}
-
+        	
         	$target_group = (isset($_GET['target']) && $_GET['target'] != '')?$this->is_target($_GET['target'], $instance['target_group']):$this->is_target($instance['target_group']);
-
+        	
         		$p_args = array(
                 	'post_type' => 'products_review',
                 	'orderby'   => 'meta_value_num',
                 	'meta_key'  => 'ratings',
-									'posts_per_page' => 5,
+		  	'posts_per_page' => 5,
                 	'tax_query' => array(
                 		array(
                 			'taxonomy' => 'target-group',
@@ -39,19 +50,19 @@ if(!class_exists('Product_Reviews_Widget'))
                 		),
                 	),
                 );
-
+                
                 $products_reviews = new WP_Query( $p_args );
-
+                
                 $result = '';
-
+                
                 // The Loop
                 if ( $products_reviews->have_posts() ) {
                 	$result .= '<ul class="pr_items">';
                 	while ( $products_reviews->have_posts() ) {
                 		$products_reviews->the_post();
-
+                		
                 		global $post;
-
+                		
                 		$title = get_the_title();
                 		$imgUrl = get_the_post_thumbnail_url();
                 		$img = (isset($imgUrl) && $imgUrl != '')?$imgUrl:get_option('default_image_url');
@@ -59,31 +70,31 @@ if(!class_exists('Product_Reviews_Widget'))
                 		$ratings_value = get_post_meta($post->ID, 'ratings', true);
                 		$ratings_value = (isset($ratings_value) && $ratings_value > 0)?$ratings_value:1;
                 		$empty = 5 - $ratings_value;
-
+                		
                 		// get stars HTML output based on what values are saved in the database
                 		$filled = $this->stars('filled', $ratings_value);
                 		$empty_stars = $this->stars('empty', $empty);
-
+                		
                 		$ratings = $filled . $empty_stars;
-
+                		
                 		$result .= '<li class="pr_item"><div class="pr_img" style="background: url(\'' . $img . '\') no-repeat;">' . $image . '</div>';
                 		$result .= '<div class="pr_ratings">' . $ratings . '</div>';
                 		$result .= '<div class="pr_title">' . $title . '</div></li>';
-
+                		
                 	}
                 	$result .= '</ul>';
-
+                	
                 	echo $result;
-
+                	
                 	/* Restore original Post Data */
                 	wp_reset_postdata();
                 } else {
-                	echo esc_html__( 'No products found!' );
+                	echo esc_html__( 'No products found!' );	
                 }
 
         	echo $args['after_widget'];
     	}
-
+    	
     	/**
     	 * Stars Output using DashIcons
     	 * $type = filled / empty
@@ -94,10 +105,10 @@ if(!class_exists('Product_Reviews_Widget'))
     	    for($i=1; $i <= $number; $i++){
     	        $output .= '<span class="dashicons dashicons-star-' . $type . '"></span>';
     	    }
-
+    	    
     	    return $output;
     	}
-
+    	
     	/**
     	 * Checking if Target passed in URL exists
     	 * $target = passed in the URL using $_GET['target']
@@ -105,33 +116,31 @@ if(!class_exists('Product_Reviews_Widget'))
     	 */
     	public function is_target($target = '', $default = ''){
     	    $output = '';
-
+    	    
     	    $is_target_exists = get_term_by('slug', $target, 'target-group');
-
+    	    
     	    $default = ($default != '')?$default:get_option('previews_target');
-
+    	    
     	    if(isset($is_target_exists->slug) && $is_target_exists->slug != ''){
     	        $output = $is_target_exists->slug;
-    	        setcookie('wp_product_reviews_target', $is_target_exists->slug);
     	    }else{
     	      $output = (isset($_COOKIE['wp_product_reviews_target']) && $_COOKIE['wp_product_reviews_target'] != '')?$_COOKIE['wp_product_reviews_target']:$default;
-    	      setcookie('wp_product_reviews_target', $output);
     	    }
-
+    	    
     	    return $output;
-
+    	    
     	}
-
+    	
     	public function update( $new_instance, $old_instance ) {
     		// Save widget options
     		$instance = array();
         	$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-
+        		
         	$instance['target_group'] = ( ! empty ( $new_instance['target_group'] ) ) ? $new_instance['target_group'] : '';
 
         	return $instance;
     	}
-
+    
     	public function form( $instance ) {
     		// Output admin widget options form
     		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'Cool Stuff' );
@@ -140,9 +149,9 @@ if(!class_exists('Product_Reviews_Widget'))
     		$terms = get_terms( 'target-group', array(
                         'hide_empty' => false,
                     ) );
-
+                    
             $options = '<option value="">Select Target Group</option>';
-
+            
             if(isset($terms) && count($terms) > 0){
                 foreach($terms as $term){
                     $selected = ($term->slug == $target_group)?'selected':'';
