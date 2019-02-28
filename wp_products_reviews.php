@@ -8,6 +8,12 @@ Author: Mehdi Hadiany
 Author URI:
 License:
 */
+// exit if file is called directly
+if ( ! defined( 'ABSPATH' ) ) {
+
+	exit;
+
+}
 
 if(!class_exists('WP_Products_Reviews'))
 {
