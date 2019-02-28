@@ -30,6 +30,7 @@ if(!class_exists('Product_Reviews_Widget'))
                 	'post_type' => 'products_review',
                 	'orderby'   => 'meta_value_num',
                 	'meta_key'  => 'ratings',
+									'posts_per_page' => 5,
                 	'tax_query' => array(
                 		array(
                 			'taxonomy' => 'target-group',
