@@ -2,8 +2,8 @@
 /*
 Plugin Name: Products with Reviews
 Plugin URI: https://github.com/medy512/wp_products_reviews
-Description: Products with Reviews, With this plugin you can add products within your WordPress website and assing ratings and target groups to the product, and displays in the widget
-Version: 1.0
+Description: Products with Reviews, With this plugin you can add products within your WordPress website, and assign ratings, target groups to the product, and displays in the widget
+Version: 1.1
 Author: Mehdi Hadiany
 Author URI:
 License:
