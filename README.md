@@ -1,8 +1,6 @@
 # Plugin Name 
 
-Plugin Name:  WP Products Reviews
-Description:  Plugin for Products Rating and using by different Marketing groups
-
+WP Products Reviews
 
 
 
