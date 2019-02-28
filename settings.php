@@ -40,7 +40,7 @@ if(!class_exists('WP_Products_Reviews_Settings'))
         	// add your setting's fields
             add_settings_field(
                 'wp_products_reviews-previews_target',
-                'Target Group',
+                'Default Target Group',
                 array(&$this, 'settings_field_select'),
                 'wp_products_reviews',
                 'wp_products_reviews-section',
@@ -52,7 +52,7 @@ if(!class_exists('WP_Products_Reviews_Settings'))
            	// add your setting's fields
             add_settings_field(
                 'wp_products_reviews-default_image_url',
-                'Default Image URL: ',
+                'Default Product Placeholder Image URL: ',
                 array(&$this, 'settings_field_input_text'),
                 'wp_products_reviews',
                 'wp_products_reviews-section',
